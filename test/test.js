@@ -2,7 +2,7 @@ var httpMocks = require('node-mocks-http'),
     handler = require('../lib/index')
 
 var should = require('chai').should()
-const key = "okesk"
+const key = process.env.JWT_KEY
 
 describe('Token handling',function(){
 

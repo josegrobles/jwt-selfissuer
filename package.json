@@ -1,0 +1,32 @@
+{
+  "name": "jwt-selfissuer",
+  "version": "0.0.1",
+  "description": "Auto JWT renewal middleware for Express",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josegrobles/jwt-selfissuer.git"
+  },
+  "keywords": [
+    "jwt",
+    "selfissuing",
+    "selfissuer",
+    "renewal",
+    "tokens",
+    "token",
+    "express",
+    "middleware"
+  ],
+  "author": "Jose Antonio <josegrobles1997@gmail.com> (https://josegrobles.me)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/josegrobles/jwt-selfissuer/issues"
+  },
+  "homepage": "https://github.com/josegrobles/jwt-selfissuer#readme",
+  "dependencies": {
+    "jsonwebtoken": "^7.2.1"
+  }
+}

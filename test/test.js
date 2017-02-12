@@ -1,5 +1,7 @@
 var httpMocks = require('node-mocks-http'),
     handler = require('../lib/index')
+var chai = require('chai')
+var assert = chai.assert
 
 var should = require('chai').should()
 const key = process.env.JWT_KEY
@@ -16,36 +18,39 @@ describe('Token handling - With Expired Token', function() {
         }
     });
 
-    var res = httpMocks.createResponse({
-        eventEmitter: require('events').EventEmitter
-    });
+    var res = httpMocks.createResponse();
 
-    var data
+
 
     it('Check token generated', function(done) {
+      function ok(){
+        var data = res._headers
+        token = data
+        assert.property(data,'X-Token')
+        done()
+      }
         var f1 = handler(key)
-        f1(req, res)
-        res.on('end', function() {
-            data = JSON.parse(res._getData())
-            data.should.have.property('token').with.length.above(10)
-            done()
-        })
+        f1(req, res, ok)
     })
 
     it('Check expire date', function(done) {
-        token = data.token
-        data.should.have.property('expire')
+      function ok(){
+        var data = res._headers
+        assert.property(data,'Expires')
         done()
+      }
+        var f1 = handler(key)
+        f1(req, res, ok)
     })
 })
 
 
 describe('Token handling - With Working Token', function() {
-    var req,res,data,authorization
+  var authorization,req,res
 
-    it('Check if error info is provided', function(done) {
 
-      authorization = 'JWT ' + token
+    it('Check that no token is generated', function(done) {
+      authorization = 'JWT ' + token['X-Token']
 
       req = httpMocks.createRequest({
           method: 'POST',
@@ -54,23 +59,25 @@ describe('Token handling - With Working Token', function() {
           }
       });
 
-      res = httpMocks.createResponse({
-          eventEmitter: require('events').EventEmitter
-      });
+      res = httpMocks.createResponse();
 
-        let f1 = handler(key)
-        f1(req, res)
-
-        res.on('end', function() {
-            data = JSON.parse(res._getData())
-            data.should.have.property('status').and.equal('error')
-            done()
-        })
+      function ok(){
+        var data = res._headers
+        assert.equal(data['X-Token'],token['X-Token'])
+        done()
+      }
+        var f1 = handler(key)
+        f1(req, res, ok)
     })
 
-    it('Check if error message is accurate', function(done) {
-        data.should.have.property('message').and.equal('Working Token')
+    it('Check expire date', function(done) {
+      function ok(){
+        var data = res._headers
+        assert.equal(data['Expires'],data.Expires)
         done()
+      }
+        var f1 = handler(key)
+        f1(req, res, ok)
     })
 
 })

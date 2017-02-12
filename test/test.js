@@ -27,7 +27,7 @@ describe('Token handling - With Expired Token', function() {
         f1(req, res)
         res.on('end', function() {
             data = JSON.parse(res._getData())
-            data.should.have.property('token')
+            data.should.have.property('token').with.length.above(10)
             done()
         })
     })
@@ -63,13 +63,45 @@ describe('Token handling - With Working Token', function() {
 
         res.on('end', function() {
             data = JSON.parse(res._getData())
-            data.should.have.property('status')
+            data.should.have.property('status').and.equal('error')
             done()
         })
     })
 
-    it('Check expire date', function(done) {
-        data.should.have.property('message')
+    it('Check if error message is accurate', function(done) {
+        data.should.have.property('message').and.equal('Working Token')
+        done()
+    })
+
+})
+
+describe('Token handling - Without Token being sent', function() {
+    var req,res,data
+
+    it('Check if error info is provided', function(done) {
+
+      req = httpMocks.createRequest({
+          method: 'POST'
+      });
+
+      res = httpMocks.createResponse();
+
+        let f1 = handler(key)
+        f1(req, res)
+
+        data = JSON.parse(res._getData())
+        data.should.have.property('status').and.equal('error')
+        done()
+    })
+
+    it('Check if error message is accurate', function(done) {
+        data.should.have.property('message').and.equal('Wrong Token')
+        done()
+    })
+
+    it('Check if error code is correct', function(done) {
+        const status = res._getStatusCode()
+        status.should.equal(400)
         done()
     })
 

@@ -1,4 +1,3 @@
-'use strict'
 var httpMocks = require('node-mocks-http'),
     handler = require('../lib/index')
 

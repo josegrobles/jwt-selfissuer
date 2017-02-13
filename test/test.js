@@ -35,13 +35,13 @@ describe('Token handling - With Expired Token', function() {
 
     it('Check info is correctly stored - username', function(done) {
       const info = req.info
-      info.should.have.property('username')
+      info.should.have.property('username').and.equal('asdasadsa')
       done()
     })
 
     it('Check info is correctly stored - permissions', function(done) {
       const info = req.info
-      info.should.have.property('permissions')
+      info.should.have.property('permissions').and.equal('user')
       done()
     })
 
@@ -74,13 +74,13 @@ describe('Token handling - With Working Token', function() {
 
     it('Check info is correctly stored - username', function(done) {
       const info = req.info
-      info.should.have.property('username')
+      info.should.have.property('username').and.equal('asdasadsa')
       done()
     })
 
     it('Check info is correctly stored - permissions', function(done) {
       const info = req.info
-      info.should.have.property('permissions')
+      info.should.have.property('permissions').and.equal('user')
       done()
     })
 

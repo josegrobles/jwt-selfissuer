@@ -6,21 +6,45 @@ var assert = chai.assert
 var should = require('chai').should()
 const key = process.env.JWT_KEY
 var token
+var redis = require('redis')
+var client = redis.createClient()
+let jwt = require('jsonwebtoken')
+var crypto = require('crypto')
+
+
+client.on('connect', () => {
+    console.log('Connected to Reddis Host');
+});
 
 describe('Token handling - With Expired Token', function() {
-
-    const authorization = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFzZGFzYWRzYSIsInBlcm1pc3Npb25zIjoidXNlciIsImV4cCI6MTQ4NjgxOTMyNiwiaWF0IjoxNDg2ODE4NDI2fQ.8EYW8b1vxcEGeZJaPGkhSSpuYSUSrfW4bD3p1kbo5oM'
-
-    var req = httpMocks.createRequest({
-        method: 'POST',
-        headers: {
-            authorization
-        }
-    });
-
-    var res = httpMocks.createResponse();
+    var req,res,token,authorization,hash
 
 
+    it('Create token', function(done) {
+      hash = crypto.randomBytes(8)
+      hash = hash.toString('hex')
+      info = {username:"test",permissions:"user",hash}
+      info.exp = Math.floor(Date.now()/1000)
+      token = jwt.sign(info, key)
+      authorization = "JWT "+ token
+      var req = httpMocks.createRequest({
+          method: 'POST',
+          headers: {
+              authorization
+          }
+      });
+
+      var res = httpMocks.createResponse();
+      done()
+    })
+
+    it('Store token along hash', function(done) {
+      let uuid = crypto.randomBytes(32)
+      uuid = uuid.toString('hex')
+      client.hset("test_hashes",uuid,hash, (err,response) =>{
+        done()
+      })
+    })
 
     it('Check token generated', function(done) {
       function ok(){
@@ -29,7 +53,7 @@ describe('Token handling - With Expired Token', function() {
         assert.property(data,'X-Token')
         done()
       }
-        var f1 = handler(key)
+        var f1 = handler(key,client)
         f1(req, res, ok)
     })
 
@@ -68,7 +92,7 @@ describe('Token handling - With Working Token', function() {
         assert.equal(data['X-Token'],token)
         done()
       }
-        var f1 = handler(key)
+        var f1 = handler(key,client)
         f1(req, res, ok)
     })
 
@@ -97,7 +121,7 @@ describe('Token handling - Without Token being sent', function() {
 
       res = httpMocks.createResponse();
 
-        let f1 = handler(key)
+        let f1 = handler(key,client)
         f1(req, res)
 
         data = JSON.parse(res._getData())

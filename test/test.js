@@ -25,7 +25,7 @@ describe('Token handling - With Expired Token', function() {
     it('Check token generated', function(done) {
       function ok(){
         var data = res._headers
-        token = data
+        token = data['X-Token']
         assert.property(data,'X-Token')
         done()
       }
@@ -33,15 +33,6 @@ describe('Token handling - With Expired Token', function() {
         f1(req, res, ok)
     })
 
-    it('Check expire date', function(done) {
-      function ok(){
-        var data = res._headers
-        assert.property(data,'Expires')
-        done()
-      }
-        var f1 = handler(key)
-        f1(req, res, ok)
-    })
 })
 
 
@@ -50,8 +41,7 @@ describe('Token handling - With Working Token', function() {
 
 
     it('Check that no token is generated', function(done) {
-      authorization = 'JWT ' + token['X-Token']
-
+      authorization = 'JWT ' + token
       req = httpMocks.createRequest({
           method: 'POST',
           headers: {
@@ -63,22 +53,13 @@ describe('Token handling - With Working Token', function() {
 
       function ok(){
         var data = res._headers
-        assert.equal(data['X-Token'],token['X-Token'])
+        assert.equal(data['X-Token'],token)
         done()
       }
         var f1 = handler(key)
         f1(req, res, ok)
     })
 
-    it('Check expire date', function(done) {
-      function ok(){
-        var data = res._headers
-        assert.equal(data['Expires'],data.Expires)
-        done()
-      }
-        var f1 = handler(key)
-        f1(req, res, ok)
-    })
 
 })
 

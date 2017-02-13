@@ -71,7 +71,7 @@ describe('Token handling - With Working Token', function() {
         var f1 = handler(key)
         f1(req, res, ok)
     })
-    
+
     it('Check info is correctly stored - username', function(done) {
       const info = req.info
       info.should.have.property('username')

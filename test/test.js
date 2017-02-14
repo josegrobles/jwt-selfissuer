@@ -40,7 +40,6 @@ describe('Token handling - With Expired Token', function() {
                     }
                 });
                 res = httpMocks.createResponse();
-                console.log(token)
                 done()
             })
         })
@@ -148,6 +147,46 @@ describe('Token handling - Without Token being sent', function() {
     it('Check if error code is correct', function(done) {
         const status = res._getStatusCode()
         status.should.equal(400)
+        done()
+    })
+
+})
+
+
+describe('Token handling - Check corrupted token', function() {
+    var req, res, data
+
+    before(function(){
+      const authorization = 'JWT asjifdoaofjisaodi'
+
+      req = httpMocks.createRequest({
+          method: 'POST',
+          headers: {
+              authorization
+          }
+      });
+
+      res = httpMocks.createResponse({
+        eventEmitter: require('events').EventEmitter
+      });
+    })
+
+    it('Check if error message is correct', function(done) {
+
+        let f1 = handler(key, client)
+        f1(req, res)
+
+        res.on('end',function(){
+          data = JSON.parse(res._getData())
+          assert.equal(data.message,"jwt malformed")
+          done()
+
+        })
+
+    })
+
+    it('Check if error type is correct', function(done) {
+        assert.equal(data.error_type,"JsonWebTokenError")
         done()
     })
 

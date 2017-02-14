@@ -5,7 +5,7 @@ var assert = chai.assert
 
 var should = require('chai').should()
 const key = process.env.JWT_KEY
-var token
+var tokenG
 var redis = require('redis')
 var client = redis.createClient()
 let jwt = require('jsonwebtoken')
@@ -17,7 +17,7 @@ client.on('connect', () => {
 });
 
 describe('Token handling - With Expired Token', function() {
-    var req,res,token,authorization,hash
+    var req,res,token,hash
 
 
     it('Create token', function(done) {
@@ -26,17 +26,9 @@ describe('Token handling - With Expired Token', function() {
       info = {username:"test",permissions:"user",hash}
       info.exp = Math.floor(Date.now()/1000)
       token = jwt.sign(info, key)
-      authorization = "JWT "+ token
-      var req = httpMocks.createRequest({
-          method: 'POST',
-          headers: {
-              authorization
-          }
-      });
-
-      var res = httpMocks.createResponse();
       done()
     })
+
 
     it('Store token along hash', function(done) {
       let uuid = crypto.randomBytes(32)
@@ -46,10 +38,25 @@ describe('Token handling - With Expired Token', function() {
       })
     })
 
+    it('Create Request and response mock', function(done) {
+      const authorization = "JWT "+ token
+
+      req = httpMocks.createRequest({
+          method: 'POST',
+          headers: {
+              authorization
+          }
+      });
+
+      res = httpMocks.createResponse();
+
+      done()
+    })
+
     it('Check token generated', function(done) {
       function ok(){
         var data = res._headers
-        token = data['X-Token']
+        tokenG = data['X-Token']
         assert.property(data,'X-Token')
         done()
       }
@@ -59,7 +66,7 @@ describe('Token handling - With Expired Token', function() {
 
     it('Check info is correctly stored - username', function(done) {
       const info = req.info
-      info.should.have.property('username').and.equal('asdasadsa')
+      info.should.have.property('username').and.equal('test')
       done()
     })
 
@@ -77,7 +84,8 @@ describe('Token handling - With Working Token', function() {
 
 
     it('Check that no token is generated', function(done) {
-      authorization = 'JWT ' + token
+      authorization = 'JWT ' + tokenG
+
       req = httpMocks.createRequest({
           method: 'POST',
           headers: {
@@ -89,7 +97,7 @@ describe('Token handling - With Working Token', function() {
 
       function ok(){
         var data = res._headers
-        assert.equal(data['X-Token'],token)
+        assert.equal(data['X-Token'],tokenG)
         done()
       }
         var f1 = handler(key,client)
@@ -98,7 +106,7 @@ describe('Token handling - With Working Token', function() {
 
     it('Check info is correctly stored - username', function(done) {
       const info = req.info
-      info.should.have.property('username').and.equal('asdasadsa')
+      info.should.have.property('username').and.equal('test')
       done()
     })
 

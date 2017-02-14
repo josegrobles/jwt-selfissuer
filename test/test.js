@@ -40,6 +40,7 @@ describe('Token handling - With Expired Token', function() {
                     }
                 });
                 res = httpMocks.createResponse();
+                console.log(token)
                 done()
             })
         })

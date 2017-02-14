@@ -1,6 +1,6 @@
 {
   "name": "jwt-selfissuer",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "description": "Auto JWT renewal middleware for Express",
   "main": "lib/index.js",
   "scripts": {
@@ -27,11 +27,13 @@
   },
   "homepage": "https://github.com/josegrobles/jwt-selfissuer#readme",
   "dependencies": {
-    "jsonwebtoken": "^7.2.1"
+    "jsonwebtoken": "^7.2.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
-    "node-mocks-http": "^1.5.6"
+    "node-mocks-http": "^1.5.6",
+    "redis": "^2.6.5"
   }
 }

@@ -191,3 +191,48 @@ describe('Token handling - Check corrupted token', function() {
     })
 
 })
+
+describe('Token handling - Token with hash not in db', function() {
+    var req, res, data
+
+    before(function(done) {
+        hash = crypto.randomBytes(8)
+        hash = hash.toString('hex')
+        info = {
+            username: "test",
+            permissions: "user",
+            hash
+        }
+        info.exp = Math.floor(Date.now() / 1000)
+        jwt.sign(info, key, {}, function(err,token) {
+            const authorization = "JWT " + token
+            req = httpMocks.createRequest({
+                method: 'POST',
+                headers: {
+                    authorization
+                }
+            });
+            res = httpMocks.createResponse({
+              eventEmitter: require('events').EventEmitter
+            });
+            done()
+        })
+    });
+
+    it('Check if error message is correct', function(done) {
+      let f1 = handler(key, client)
+      f1(req, res)
+
+      res.on('end',function(){
+        data = JSON.parse(res._getData())
+        assert.equal(data.message,"hash not found")
+        done()
+
+      })
+    })
+    it('Check if error type is correct', function(done) {
+        assert.equal(data.error_type,"HashError")
+        done()
+    })
+
+})

@@ -23,9 +23,9 @@ A Token must include the next parameters:
 - Expire time
 - A hash previously stored in Redis
 
-##How to accomplish with this requirements
+##How to comply with this requirements
 ###Expire time
-To accomplish with the expiring time you just need to issue a token with a ***exp*** key on the ***payload***.
+To comply with the expiring time you just need to issue a token with a ***exp*** key on the ***payload***.
 There are two ways of doing it using the package ***jsonwebtoken***:
 ####1. Adding a *exp* key to the payload
 ```javascript
@@ -42,3 +42,6 @@ options.expiresIn = 15*60 //Expires in 15 minutes
 const token = jwt.sign(payload,key,options)
 ```
 ###A hash previously stored in Redis
+The way explained here is the best way I could think of, but I'm totally open to change my mind.
+
+***First*** we need to create a random hash for it to be stored along the payload:

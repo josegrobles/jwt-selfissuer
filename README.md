@@ -1,5 +1,6 @@
 # jwt-selfissuer  [![Build Status](https://travis-ci.com/josegrobles/jwt-selfissuer.svg?token=7JpgXMQqSWYBts2sAmZb&branch=master)](https://travis-ci.com/josegrobles/jwt-selfissuer) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Logo](https://github.com/josegrobles/jwt-selfissuer/wiki/images/unspecified.png)
 JWT Auto-Renewal Middleware for Express
 
 #What it is?
@@ -17,7 +18,7 @@ Once it has been installed, let's import it to the file where we want to mount t
 ```javascript
 var issuer = require('jwt-selfissuer')
 ```  
-#### But ***first*** lets talk about how to make this works flawlessly
+#### But ***first*** lets talk about how to make this works flawlessly!
 #Issuing proper tokens
 ##Requirements
 A Token must include the next parameters:
@@ -66,3 +67,4 @@ client.multi()
 ```
 We generate an ***UUID*** which is related to every device
 #### *Now everything is ready!*
+#Integrating it with Express

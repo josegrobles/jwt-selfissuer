@@ -10,13 +10,14 @@ It works by using **redis** to store a hash which is directly linked with the pr
 
 #How it works?
 First, let's install it by writting
-```
+```javascript
 npm install jwt-selfissuer
 ```
 Once it has been installed, let's import it to the file where we want to mount the middleware
-```
+```javascript
 var issuer = require('jwt-selfissuer')
 ```  
+But ***first*** lets talk about how to make this works flawlessly
 #Issuing proper tokens
 ##Requirements
 A Token must include the next parameters:
@@ -44,4 +45,24 @@ const token = jwt.sign(payload,key,options)
 ###A hash previously stored in Redis
 The way explained here is the best way I could think of, but I'm totally open to change my mind.
 
-***First*** we need to create a random hash for it to be stored along the payload:
+***First*** we need to create a random *hash* for it to be stored along the payload:
+```javascript
+let hash = crypto.randomBytes(8)
+hash = hash.toString('hex')
+payload.hash = hash
+```
+###### *You shold use this code along the previous one used *Expire time*
+
+***Secondly*** we need to store this *hash* on redis along other info such related to the device
+```javascript
+let device_uuid = crypto.randomBytes(32)
+device_uuid = device_uuid.toString('hex')
+client.multi()
+      .hset(username+"_devices",device_uuid,JSON.stringify(device_info))
+      .hset(username+"_hashes",device_uuid,hash)
+      .exec((err,info) => {
+        if(err) console.log(err)
+      })
+```
+We generate an ***uuid*** which is related to every device
+##### *Now everything is ready!*

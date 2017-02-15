@@ -4,7 +4,7 @@
 
 JWT Auto-Renewal Middleware for Express
 
-#What it is?
+#What is it?
 
 **jwt-selfissuer** works by renewing a ***previous expired token*** with a ***new one***, and returning it on the ***response headers***. It's born from the idea of having an easy way of ***issuing tokens*** with **security** and **easiness**. By using it you provide an easy and secure way of ***controlling user access***.
 
@@ -46,7 +46,7 @@ const token = jwt.sign(payload,key,options)
 ```
 ###A hash previously stored in Redis
 The way explained here is the best way I could think of, but I'm totally open to change my mind.
-
+#### *These two next step should be used as functions when *registering* or *login* an user*
 ***First*** we need to create a random *hash* for it to be stored along the payload:
 ```javascript
 let hash = crypto.randomBytes(8)
@@ -66,6 +66,6 @@ client.multi()
         if(err) console.log(err)
       })
 ```
-We generate an ***UUID*** which is related to every device
+We are generating an ***UUID*** which is related to every device
 #### *Now everything is ready!*
 #Integrating it with Express

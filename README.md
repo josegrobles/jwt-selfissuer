@@ -46,7 +46,7 @@ const token = jwt.sign(payload,key,options)
 ```
 ###A hash previously stored in Redis
 The way explained here is the best way I could think of, but I'm totally open to change my mind.
-#### *These two next step should be used as functions when *registering* or *login* an user*
+#### *These two next step should be used as functions when registering or login an user*
 ***First*** we need to create a random *hash* for it to be stored along the payload:
 ```javascript
 let hash = crypto.randomBytes(8)

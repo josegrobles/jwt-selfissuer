@@ -4,9 +4,9 @@ JWT Auto-Renewal Middleware for Express
 
 #What it is?
 
-**jwt-selfissuer** works by renewing a previous expired token with a new one, and returning it on the response headers. It's born from the idea of having an easy way of issuing tokens with security and easiness. By using it you provide an easy and secure way of controlling user access.
+**jwt-selfissuer** works by renewing a ***previous expired token*** with a ***new one***, and returning it on the ***response headers***. It's born from the idea of having an easy way of ***issuing tokens*** with **security** and **easiness**. By using it you provide an easy and secure way of ***controlling user access***.
 
-It works by using **redis** to store a hash which is directly linked with the previous used token, this way it manages to only issue a new token when the hash stored in it matches one of the already registered on the **DB**. It also provides an easy way to **revoke** access to determined devices as each device is linked to an unique **uuid**.
+It works by using **Redis** to store a *hash* which is directly linked with the *previous used token*, this way it manages to only issue a new token when the hash stored in it matches one of the already registered on **Redis**. It also provides an easy way to **revoke** access to determined devices as each device is linked to an unique **UUID**.
 
 #How it works?
 First, let's install it by writting
@@ -17,7 +17,7 @@ Once it has been installed, let's import it to the file where we want to mount t
 ```javascript
 var issuer = require('jwt-selfissuer')
 ```  
-But ***first*** lets talk about how to make this works flawlessly
+#### But ***first*** lets talk about how to make this works flawlessly
 #Issuing proper tokens
 ##Requirements
 A Token must include the next parameters:
@@ -51,7 +51,7 @@ let hash = crypto.randomBytes(8)
 hash = hash.toString('hex')
 payload.hash = hash
 ```
-###### *You shold use this code along the previous one used *Expire time*
+###### * You shold use this code along the previous one used *Expire time*
 
 ***Secondly*** we need to store this *hash* on redis along other info such related to the device
 ```javascript
@@ -64,5 +64,5 @@ client.multi()
         if(err) console.log(err)
       })
 ```
-We generate an ***uuid*** which is related to every device
-##### *Now everything is ready!*
+We generate an ***UUID*** which is related to every device
+#### *Now everything is ready!*

@@ -17,7 +17,7 @@ npm install jwt-selfissuer
 ```
 Once it has been installed, let's import it to the file where we want to mount the middleware
 ```javascript
-var issuer = require('jwt-selfissuer')
+var jwt_issuer = require('jwt-selfissuer')
 ```  
 #### But ***first*** lets talk about how to make this works flawlessly!
 #Issuing proper tokens
@@ -68,4 +68,28 @@ client.multi()
 ```
 We are generating an ***UUID*** which is related to every device
 #### *Now everything is ready!*
-#Integrating it with Express
+# Integrating it with Express
+There are multiples way of doing it, but here I'm going to explain the easiest one:
+## Creating the configurations
+##### The first *paramater* we need to pass is the key to encrypt the token
+```javascript
+const key = "ThisIsTheKey"
+```
+##### The second *paramater* is the *Redis Client*
+```javascript
+var redis = require('redis')
+client = redis.createClient()
+```
+##### The third *paramater* are the verification options for the token *(Optional)*
+```javascript
+const verification_options = {ignoreExpiration:true}
+```
+##### The last one *paramater* are the signing options for the token. Here you can change when the token Expires. *(Optional)*
+```javascript
+const signing_options = {expiresIn:900}
+```
+###### Expire time is by default *15 minutes*
+## Declaring the variable
+```javascript
+var issuerMiddleware = jwt_issuer(key, client, verification_options, signing_options)
+```

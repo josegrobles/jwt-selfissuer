@@ -4,6 +4,8 @@
 
 JWT Auto-Renewal Middleware for Express
 
+Everything is explained down here but you can check it out in a better format on the *wiki* : [Link to the Wiki](https://github.com/josegrobles/jwt-selfissuer/wiki)
+
 #What is it?
 
 **jwt-selfissuer** works by renewing a ***previous expired token*** with a ***new one***, and returning it on the ***response headers***. It's born from the idea of having an easy way of ***issuing tokens*** with **security** and **easiness**. By using it you provide an easy and secure way of ***controlling user access***.

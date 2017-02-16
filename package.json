@@ -1,6 +1,6 @@
 {
   "name": "jwt-selfissuer",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "JWT Auto-Renewal Middleware for Express",
   "main": "lib/index.js",
   "scripts": {

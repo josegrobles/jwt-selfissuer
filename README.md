@@ -94,7 +94,19 @@ const verification_options = {ignoreExpiration:true}
 const signing_options = {expiresIn:900}
 ```
 ###### Expire time is by default *15 minutes*
-## Declaring the variable
+## Importing the function
 ```javascript
 var issuerMiddleware = jwt_issuer(key, client, verification_options, signing_options)
+```
+## Implementing it as a Middleware
+It is very simple, you just need to throw the previous declared variable into the endpoint that you want:
+```javascript
+router.post('/user/info',issuerMiddleware,(req,res,next) => {
+  res.send(req.info.username)
+})
+```
+Everything stored in the token payload will be accessible to you in **req.info** Just like:
+```javascript
+const info = req.info
+console.log(info) //This should print everyhing stored in your jwt
 ```

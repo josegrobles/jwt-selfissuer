@@ -10,7 +10,10 @@ JWT Auto-Renewal Middleware for Express
 
 It works by using **Redis** to store a *hash* which is directly linked with the *previous used token*, this way it manages to only issue a new token when the hash stored in it matches one of the already registered on **Redis**. It also provides an easy way to **revoke** access to determined devices as each device is linked to an unique **UUID**.
 
-#How it works?
+# How it works?
+It works by checking the **Authorization header** on the requests, it will issue a new one depending on the previous one expiration time, it responses with an ***X-Token header*** whether it has expired or not, the only difference is that if it has expired the ***X-Token*** will be the new one.
+
+# Installation
 First, let's install it by writting
 ```javascript
 npm install jwt-selfissuer

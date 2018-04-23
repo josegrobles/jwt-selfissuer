@@ -6,7 +6,7 @@ JWT Auto-Renewal Middleware for Express
 
 Everything is explained down here but you can check it out in a better format on the *wiki* : [Link to the Wiki](https://github.com/josegrobles/jwt-selfissuer/wiki)
 
-#What is it?
+# What is it?
 
 **jwt-selfissuer** works by renewing a ***previous expired token*** with a ***new one***, and returning it on the ***response headers***. It's born from the idea of having an easy way of ***issuing tokens*** with **security** and **easiness**. By using it you provide an easy and secure way of ***controlling user access***.
 
@@ -31,25 +31,25 @@ A Token must include the next parameters:
 - Expire time
 - A hash previously stored in Redis
 
-##How to comply with this requirements
-###Expire time
+## How to comply with this requirements
+### Expire time
 To comply with the expiring time you just need to issue a token with a ***exp*** key on the ***payload***.
 There are two ways of doing it using the package ***jsonwebtoken***:
-####1. Adding a *exp* key to the payload
+#### 1. Adding a *exp* key to the payload
 ```javascript
 let payload = {username: "test"}
 const expireAt = Math.round(new Date()/1000) + (15*60) //Expires in 15 minutes
 payload.exp = expireAt
 const token = jwt.sign(payload,key,options)
 ```
-####2. Adding the *expiresIn* key to the options object
+#### 2. Adding the *expiresIn* key to the options object
 ```javascript
 let payload = {username: "test"}
 let options = {}
 options.expiresIn = 15*60 //Expires in 15 minutes
 const token = jwt.sign(payload,key,options)
 ```
-###A hash previously stored in Redis
+### A hash previously stored in Redis
 The way explained here is the best way I could think of, but I'm totally open to change my mind.
 #### *These two next step should be used as functions when registering or login an user*
 ***First*** we need to create a random *hash* for it to be stored along the payload:
